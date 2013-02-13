@@ -3,8 +3,6 @@
 from django.utils.translation import ugettext_lazy as _
 
 import horizon
-# XXX This may change!
-from openstack_dashboard.dashboards.project import dashboard
 
 class Contextualizer(horizon.Panel):
     name = _("Contextualizer")
@@ -15,5 +13,7 @@ class FeynAppsPanels(horizon.PanelGroup):
     slug = 'feynapps'
     panels = ('contextualizer', )
 
-dashboard.Project.register(Contextualizer)
-dashboard.Project.panels = dashboard.Project.panels + (FeynAppsPanels, )
+# XXX enolfc: This is Folsom specific!!
+from horizon.dashboards.nova import dashboard
+dashboard.Nova.register(Contextualizer)
+dashboard.Nova.panels = dashboard.Nova.panels + (FeynAppsPanels, )
