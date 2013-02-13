@@ -17,13 +17,15 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-"""
-Setupstools script which defines an entry point which can be used for Keystone
-filter later.
-"""
-
 from setuptools import setup
 
+import os
+
+data_files = []
+for dirpath, dirnames, filenames in os.walk('feynapps_panel'):
+    if filenames and '__init__.py' not in filenames:
+        data_files.append([dirpath, [os.path.join(dirpath, f)
+                           for f in filenames]])
 
 setup(
     name='feynapps_panel',
@@ -34,9 +36,10 @@ setup(
     classifiers=[
         'Programming Language :: Python'
         'Development Status :: 5 - Production/Stable',
-        #'Topic :: Internet :: WWW/HTTP :: WSGI :: Application'
+        'Topic :: Internet :: WWW/HTTP',
         ],
     keywords='',
+    data_files=data_files,
     author='Spanish National Research Council',
     author_email='enolfc@ifca.unican.es',
     url='http://www.ifca.es',
@@ -47,8 +50,4 @@ setup(
     install_requires=[
         'setuptools',
         ],
-    #entry_points='''
-#[paste.filter_factory]
-#voms_filter = keystone_voms:VomsAuthNMiddleware.factory
-#''',
 )
