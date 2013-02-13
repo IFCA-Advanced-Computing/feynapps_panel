@@ -53,6 +53,11 @@ def get_apps():
     return config
 
 class SetInstanceDetailsAction(wf.SetInstanceDetailsAction):
+    class Meta:
+        name = _("Details")
+        help_text_template = ("nova/instances/"
+                              "_launch_details_help.html")
+
     def _get_available_images(self, request, context):
         project_id = context.get('project_id', None)
         if not hasattr(self, "_public_images"):
@@ -123,7 +128,7 @@ class CustomizeAction(workflows.Action):
                                                    required=False)
 
     class Meta:
-        name = _("Post-Creation")
+        name = _("Contextualize!")
         help_text_template = ("feynapps_panel/"
                               "_launch_customize_help.html")
 
