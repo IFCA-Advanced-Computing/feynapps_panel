@@ -14,7 +14,7 @@ $ sudo python setup.py install
 ```
 
 Add `'feynapps_panel'` to the `INSTALLED_APPS` of the `settings.py` file (In ubuntu it's
-located at `/usr/share/openstack-dashboard/openstack_dashboard/settings.py`
+located at `/usr/share/openstack-dashboard/openstack_dashboard/settings.py`)
 
 And restart apache:
 ```
