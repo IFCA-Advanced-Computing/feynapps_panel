@@ -32,7 +32,7 @@ from horizon import exceptions
 from horizon import forms
 from horizon import workflows
 
-import horizon.dashboards.nova.instances.workflows as wf
+import openstack_dashboard.dashboards.project.instances.workflows as wf
 
 LOG = logging.getLogger(__name__)
 
@@ -40,8 +40,7 @@ APPS_URL = getattr(settings, 'FEYNAPPS_URL',
                    'https://raw.github.com/enolfc/feynapps/master/apps.json')
 REPO_URL = getattr(settings, 'FEYNAPPS_REPO',
                    'http://github.com/enolfc/feynapps.git')
-IMG_ATTR = getattr(settings, 'FEYNAPPS_IMG_ATTR',
-                       'feynapps')
+IMG_ATTR = getattr(settings, 'FEYNAPPS_IMG_ATTR', 'feynapps')
 
 
 def get_apps():
@@ -51,6 +50,7 @@ def get_apps():
     except Exception, e:
         LOG.warn("Unable to load app config: %s" % e)
     return config
+
 
 class SetInstanceDetailsAction(wf.SetInstanceDetailsAction):
     class Meta:
@@ -63,11 +63,11 @@ class SetInstanceDetailsAction(wf.SetInstanceDetailsAction):
         if not hasattr(self, "_public_images"):
             public = {"is_public": True,
                       "status": "active",
-                      "property-%s" % IMG_ATTR : True,
-                     }
+                      "property-%s" % IMG_ATTR: True,
+                      }
             try:
                 public_images, _more = api.glance.image_list_detailed(request,
-                                                           filters=public)
+                                                                      filters=public)
             except:
                 public_images = []
                 exceptions.handle(request,
@@ -81,10 +81,10 @@ class SetInstanceDetailsAction(wf.SetInstanceDetailsAction):
         if not hasattr(self, "_images_for_%s" % project_id):
             owner = {"property-owner_id": project_id,
                      "status": "active",
-                     "property-%s" % IMG_ATTR : True, }
+                     "property-%s" % IMG_ATTR: True, }
             try:
                 owned_images, _more = api.glance.image_list_detailed(request,
-                                                          filters=owner)
+                                                                     filters=owner)
             except:
                 exceptions.handle(request,
                                   _("Unable to retrieve images for "
@@ -109,9 +109,13 @@ class SetInstanceDetails(wf.SetInstanceDetails):
     action_class = SetInstanceDetailsAction
     contributes = ("source_type", "source_id", "name", "count", "flavor")
 
+
 class CustomizeAction(workflows.Action):
     def __init__(self, request, context, *args, **kwargs):
-        super(CustomizeAction, self).__init__(request, context, *args, **kwargs)
+        super(CustomizeAction, self).__init__(request,
+                                              context,
+                                              *args,
+                                              **kwargs)
 
         feynapps = get_apps()
         for a in feynapps:
@@ -122,7 +126,7 @@ class CustomizeAction(workflows.Action):
             versions.reverse()
             choices = (
                 ('', _("Don't install.")),
-            ) + tuple([ (v, v) for v in versions])
+            ) + tuple([(v, v) for v in versions])
             self.fields[fname] = forms.ChoiceField(label=_(a),
                                                    choices=choices,
                                                    required=False)
@@ -135,7 +139,7 @@ class CustomizeAction(workflows.Action):
 
 class PostCreationStep(workflows.Step):
     action_class = CustomizeAction
-    t = [ 'feynapp_context_%s' % a for a in get_apps()] 
+    t = ['feynapp_context_%s' % a for a in get_apps()]
     contributes = tuple(t)
 
 
@@ -153,14 +157,14 @@ class CustomizeInstance(wf.LaunchInstance):
                      PostCreationStep)
 
     def handle(self, request, context):
-        extra_soft = {'repo': REPO_URL, 
-                      'apps': {},}
+        extra_soft = {'repo': REPO_URL,
+                      'apps': {}, }
         feynapps = get_apps()
         for a in feynapps:
             version = context.get('feynapp_context_%s' % a, '')
             if version:
                 extra_soft['apps'][a] = version
-        extra_data  = json.dumps(extra_soft)
+        extra_data = json.dumps(extra_soft)
 
         # Determine volume mapping options
         if context.get('volume_type', None):
