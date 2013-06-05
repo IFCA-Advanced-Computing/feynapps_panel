@@ -56,7 +56,7 @@ def get_apps():
 class SetInstanceDetailsAction(wf.SetInstanceDetailsAction):
     class Meta:
         name = _("Details")
-        help_text_template = ("nova/instances/"
+        help_text_template = ("project/instances/"
                               "_launch_details_help.html")
 
     def _get_available_images(self, request, context):
