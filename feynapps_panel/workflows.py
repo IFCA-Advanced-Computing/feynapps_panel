@@ -27,10 +27,11 @@ from django.utils.translation import ugettext as _
 
 from django.conf import settings
 
-from horizon import api
 from horizon import exceptions
 from horizon import forms
 from horizon import workflows
+
+from openstack_dashboard import api
 
 import openstack_dashboard.dashboards.project.instances.workflows as wf
 
