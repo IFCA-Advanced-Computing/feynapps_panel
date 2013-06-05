@@ -30,14 +30,15 @@ for dirpath, dirnames, filenames in os.walk('feynapps_panel'):
 setup(
     name='feynapps_panel',
     version='1.0',
-    description='FeynApps contextualizer panel for Horizon (Folsom).',
-    long_description='''bla bla bla
+    description='FeynApps panel for Horizon (stable/grizzly).',
+    long_description='''OpenStack Horizon panel for image contextualization
+with various Phenomenology applications (FeynHiggs, FeynArts, LoopTools, etc).
 ''',
     classifiers=[
         'Programming Language :: Python'
         'Development Status :: 5 - Production/Stable',
         'Topic :: Internet :: WWW/HTTP',
-        ],
+    ],
     keywords='',
     data_files=data_files,
     author='Spanish National Research Council',
@@ -49,5 +50,5 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        ],
+    ],
 )
