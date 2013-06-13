@@ -7,7 +7,7 @@ OpenStack Horizon Panel for image contextualization
 
 Install the package using pip:
 ```
-pip install git+https:/github.com/IFCA/feynapps_panel.git@stable/grizzly#egg=feynapps_panel
+pip install git+https://github.com/IFCA/feynapps_panel.git@stable/grizzly#egg=feynapps_panel
 ```
 
 Or by cloning and using the setup.py provided:
