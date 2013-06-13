@@ -3,25 +3,40 @@ feynapps_panel
 
 OpenStack Horizon Panel for image contextualization
 
-## Installation
+## Get the package 
 
-Get the code and install the python package:
+Install the package using pip:
+```
+pip install git+https:/github.com/IFCA/feynapps_panel.git@stable/grizzly#egg=feynapps_panel
+```
 
+Or by cloning and using the setup.py provided:
 ```
 $ git clone -b stable/grizzly https://github.com/IFCA/feynapps_panel.git
 $ cd feynapps_panel
-$ sudo python setup.py install
+$ python setup.py install
 ```
 
-Add `'feynapps_panel'` to the `INSTALLED_APPS` of the `settings.py` file (In ubuntu it's
+## Add to INSTALLED_APPS
+
+Add `'feynapps_panel'` to the `INSTALLED_APPS` of your django settings.
+
+You can add it in the global `settings.py` file (In ubuntu it's
 located at `/usr/share/openstack-dashboard/openstack_dashboard/settings.py`)
 
-And restart apache:
+Or in your `local_settings.py` with the following lines:
+```
+import sys
+mod = sys.modules['openstack_dashboard.settings']
+mod.INSTALLED_APPS += ('feynapps_panel',)
+```
+
+Then restart apache:
 ```
 $ sudo service apache2 restart
 ```
 
-## Configuration
+## Extra Configuration
 
 In your `local_settings.py` file you can also configure the following variables:
 
