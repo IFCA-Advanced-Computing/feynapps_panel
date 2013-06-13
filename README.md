@@ -12,9 +12,7 @@ pip install git+https:/github.com/IFCA/feynapps_panel.git@stable/grizzly#egg=fey
 
 Or by cloning and using the setup.py provided:
 ```
-$ git clone -b stable/grizzly https://github.com/IFCA/feynapps_panel.git
-$ cd feynapps_panel
-$ python setup.py install
+git clone -b stable/grizzly https://github.com/IFCA/feynapps_panel.git ; cd feynapps_panel; python setup.py install
 ```
 
 ## Add to INSTALLED_APPS
@@ -33,7 +31,7 @@ mod.INSTALLED_APPS += ('feynapps_panel',)
 
 Then restart apache:
 ```
-$ sudo service apache2 restart
+service apache2 restart
 ```
 
 ## Extra Configuration
