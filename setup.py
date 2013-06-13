@@ -49,7 +49,7 @@ with various Phenomenology applications (FeynHiggs, FeynArts, LoopTools, etc).
     include_package_data=True,
     packages=['feynapps_panel'],
     package_data={
-        'feynapps_panel/templates': ['templates/feynapps_panel/*.html']
+        'feynapps_panel': ['templates/feynapps_panel/*.html']
     },
     zip_safe=False,
     install_requires=[
