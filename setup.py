@@ -27,6 +27,8 @@ for dirpath, dirnames, filenames in os.walk('feynapps_panel'):
         data_files.append([dirpath, [os.path.join(dirpath, f)
                            for f in filenames]])
 
+print data_files
+
 setup(
     name='feynapps_panel',
     version='1.0',
@@ -40,13 +42,15 @@ with various Phenomenology applications (FeynHiggs, FeynArts, LoopTools, etc).
         'Topic :: Internet :: WWW/HTTP',
     ],
     keywords='',
-    data_files=data_files,
     author='Spanish National Research Council',
     author_email='enolfc@ifca.unican.es',
     url='http://www.ifca.es',
     license='Apache License, Version 2.0',
     include_package_data=True,
     packages=['feynapps_panel'],
+    package_data={
+        'feynapps_panel/templates': ['templates/feynapps_panel/*.html']
+    },
     zip_safe=False,
     install_requires=[
         'setuptools',
