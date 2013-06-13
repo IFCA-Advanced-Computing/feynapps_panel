@@ -19,15 +19,6 @@
 
 from setuptools import setup
 
-import os
-
-data_files = []
-for dirpath, dirnames, filenames in os.walk('feynapps_panel'):
-    if filenames and '__init__.py' not in filenames:
-        data_files.append([dirpath, [os.path.join(dirpath, f)
-                           for f in filenames]])
-
-print data_files
 
 setup(
     name='feynapps_panel',
