@@ -33,7 +33,7 @@ from horizon import workflows
 
 from openstack_dashboard import api
 
-import openstack_dashboard.dashboards.project.instances.workflows as wf
+import openstack_dashboard.dashboards.project.instances.workflows.create_instance as wf
 
 LOG = logging.getLogger(__name__)
 
