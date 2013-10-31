@@ -29,10 +29,11 @@ from django.conf import settings
 
 from horizon import exceptions
 from horizon import forms
+from horizon.utils import functions
 from horizon import workflows
 
 from openstack_dashboard import api
-
+from openstack_dashboard.dashboards.project.images_and_snapshots import utils
 import openstack_dashboard.dashboards.project.instances.workflows.create_instance as wf
 
 LOG = logging.getLogger(__name__)
@@ -59,56 +60,26 @@ class SetInstanceDetailsAction(wf.SetInstanceDetailsAction):
         help_text_template = ("project/instances/"
                               "_launch_details_help.html")
 
-    def _get_available_images(self, request, context):
-        project_id = context.get('project_id', None)
-        if not hasattr(self, "_public_images"):
-            public = {"is_public": True,
-                      "status": "active",
-                      "property-%s" % IMG_ATTR: True,
-                      }
-            try:
-                public_images, _more = api.glance.image_list_detailed(request,
-                                                                      filters=public)
-            except:
-                public_images = []
-                exceptions.handle(request,
-                                  _("Unable to retrieve public images."))
-            self._public_images = public_images
-
-        # Preempt if we don't have a project_id yet.
-        if project_id is None:
-            setattr(self, "_images_for_%s" % project_id, [])
-
-        if not hasattr(self, "_images_for_%s" % project_id):
-            owner = {"property-owner_id": project_id,
-                     "status": "active",
-                     "property-%s" % IMG_ATTR: True, }
-            try:
-                owned_images, _more = api.glance.image_list_detailed(request,
-                                                                     filters=owner)
-            except:
-                exceptions.handle(request,
-                                  _("Unable to retrieve images for "
-                                    "the current project."))
-            setattr(self, "_images_for_%s" % project_id, owned_images)
-
-        owned_images = getattr(self, "_images_for_%s" % project_id)
-        images = owned_images + self._public_images
-
-        # Remove duplicate images
-        image_ids = []
-        final_images = []
+    def populate_image_id_choices(self, request, context):
+        choices = []
+        images = utils.get_available_images(request,
+                                            context.get('project_id'),
+                                            self._images_cache)
         for image in images:
-            if image.id not in image_ids:
-                image_ids.append(image.id)
-                final_images.append(image)
-        return [image for image in final_images
-                if image.container_format not in ('aki', 'ari')]
+            image.bytes = image.size
+            image.volume_size = functions.bytes_to_gigabytes(image.bytes)
+            img_attr = image.properties.get(IMG_ATTR, None)
+            if img_attr is not None:
+                choices.append((image.id, image))
+        if choices:
+            choices.insert(0, ("", _("Select Image")))
+        else:
+            choices.insert(0, ("", _("No images available")))
+        return choices
 
 
 class SetInstanceDetails(wf.SetInstanceDetails):
     action_class = SetInstanceDetailsAction
-    contributes = ("source_type", "source_id", "name", "count", "flavor")
 
 
 class CustomizeAction(workflows.Action):
@@ -154,7 +125,6 @@ class CustomizeInstance(wf.LaunchInstance):
                      SetInstanceDetails,
                      wf.SetAccessControls,
                      wf.SetNetwork,
-                     wf.VolumeOptions,
                      PostCreationStep)
 
     def handle(self, request, context):
