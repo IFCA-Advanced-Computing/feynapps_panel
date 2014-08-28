@@ -1,6 +1,6 @@
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 
 from .views import CustomizeInstanceView
 
