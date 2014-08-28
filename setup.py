@@ -19,35 +19,31 @@
 
 from setuptools import setup
 
-import os
-
-data_files = []
-for dirpath, dirnames, filenames in os.walk('feynapps_panel'):
-    if filenames and '__init__.py' not in filenames:
-        data_files.append([dirpath, [os.path.join(dirpath, f)
-                           for f in filenames]])
 
 setup(
     name='feynapps_panel',
     version='1.0',
-    description='FeynApps contextualizer panel for Horizon (Folsom).',
-    long_description='''bla bla bla
+    description='FeynApps panel for Horizon (stable/grizzly).',
+    long_description='''OpenStack Horizon panel for image contextualization
+with various Phenomenology applications (FeynHiggs, FeynArts, LoopTools, etc).
 ''',
     classifiers=[
         'Programming Language :: Python'
         'Development Status :: 5 - Production/Stable',
         'Topic :: Internet :: WWW/HTTP',
-        ],
+    ],
     keywords='',
-    data_files=data_files,
     author='Spanish National Research Council',
     author_email='enolfc@ifca.unican.es',
     url='http://www.ifca.es',
     license='Apache License, Version 2.0',
     include_package_data=True,
     packages=['feynapps_panel'],
+    package_data={
+        'feynapps_panel': ['templates/feynapps_panel/*.html']
+    },
     zip_safe=False,
     install_requires=[
         'setuptools',
-        ],
+    ],
 )
